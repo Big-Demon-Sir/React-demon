@@ -6,12 +6,20 @@ import './index.less';
 
 const Item = Form.Item;
 
-export default class Login extends Component {
+class Login extends Component {
     login = (e) => {
         e.preventDefault();
-    }
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+              console.log('接收到的表单值: ', values);
+            } else {
+                console.log('登录表单校验失败: ', err);
+            }
+        });
+    };
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return <div className="login">
             <header className="login-header">
                 <img src={logo} alt="logo"/>
@@ -21,11 +29,30 @@ export default class Login extends Component {
                 <h2>用户登录</h2>
                 <Form onSubmit={this.login} className="login-form">
                     <Item>
-                        <Input prefix={<Icon type="user" />} placeholder="用户名" />
+                    {getFieldDecorator('username', {
+                        rules: [
+                            { required: true, message: '请输入你的用户名!' },
+                            { min: 4, message: '用户名必须大于4位' },
+                            { max: 15, message: '用户名必须小于15位' },
+                            { pattern: /^[a-zA-Z_0-9]+$/, message: '用户名只能包含英文字母、数字和下划线' },
+                        ],
+                    })(
+                        <Input prefix={<Icon type="user" />} placeholder="用户名" />,
+                    )}
                     </Item>
                     <Item>
-                    <Input prefix={<Icon type="lock" />} placeholder="密码" type="password" />
+                    {getFieldDecorator('password', {
+                        rules: [
+                            { required: true, message: '请输入你的密码!' },
+                            { min: 4, message: '用户名必须大于4位' },
+                            { max: 15, message: '用户名必须小于15位' },
+                            { pattern: /^[a-zA-Z_0-9]+$/, message: '用户名只能包含英文字母、数字和下划线' },
+                        ],
+                    })(
+                        <Input prefix={<Icon type="lock" />} placeholder="密码" type="password" />
+                    )}
                     </Item>
+
                     <Item>
                         <Button type="primary" htmlType="submit" className="login-btn">登录</Button>
                     </Item>
@@ -34,3 +61,5 @@ export default class Login extends Component {
         </div>;
     }
 }
+
+export default Form.create()(Login);
