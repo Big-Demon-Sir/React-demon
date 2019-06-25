@@ -1,14 +1,12 @@
-import React,{ Component } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Login from './pages/login';
-import Admit from './pages/admit';
+import Admin from './pages/admin';
 
-export default class App extends Component {
-  render() {
+export default function App() {
     return <Switch>
         <Route path="/login" component={Login} />
-        <Route path="/" component={Admit} />
+        <Route path="/" component={Admin} />
       </Switch>;
-  }
 }
